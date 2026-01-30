@@ -1,0 +1,15 @@
+.countdown-wrapper {
+  position: relative; /* use normal flow instead of absolute */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem; /* add space below for card */
+}
+
+.countdown {
+  position: relative;
+  display: flex;
+  transform-style: preserve-3d;
+  /* optional tilt */
+  /* animation: tilt 2s infinite alternate ease-in-out; */
+}
