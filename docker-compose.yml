@@ -23,9 +23,9 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: ChronoVault
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 2137
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
