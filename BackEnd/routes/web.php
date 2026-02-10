@@ -7,4 +7,5 @@ Route::get('/', function () {
         'status' => 'ok',
         'service' => 'ChronoVault API'
     ]);
+
 });

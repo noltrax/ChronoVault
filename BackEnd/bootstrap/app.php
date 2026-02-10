@@ -1,32 +1,22 @@
 <?php
 
-use App\Http\Middleware\CorsMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Log;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
-        api: [
-            __DIR__ . '/../routes/api.v1.php',
-            // Add future versions here
-            // __DIR__ . '/../routes/api.v2.php',
-        ],
+        api: __DIR__ . '/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        log::info("message");
-        $middleware->prepend(CorsMiddleware::class);
-
-        $middleware->group('api', [
-            SubstituteBindings::class,
-        ]);
-
-
+        $middleware->prepend(HandleCors::class);
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {

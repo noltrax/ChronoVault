@@ -24,16 +24,16 @@ class StoreMessageRequest extends FormRequest
     {
         return [
             'content' => ['required', 'string', 'max:1000'],
-            'show_at' => ['required', 'date', 'after:now'],
+            'showAt' => ['required','date', 'after:now'],
         ];
     }
     public function messages(): array
     {
-        return [
-            'content.required' => 'Message content is required.',
-            'content.string'   => 'Message must be a string.',
-            'show_at.required' => 'Show date/time is required.',
-            'show_at.after'    => 'Show date/time must be in the future.',
-        ];
+      return [
+           'content.required' => 'Message content is required.',
+           'content.string'   => 'Message must be a string.',
+           'showAt.required' => 'Show date/time is required.',
+           'showAt.after'    => 'Show date/time must be in the future.',
+      ];
     }
 }

@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api\V1;
-use App\DTOs\CreateMessageDTO;
+use App\Data\CreateMessageData;
+use App\Data\ResponseMessageData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\MessageTokenResource;
 use App\Services\MessageService;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class MessageController extends Controller
 {
@@ -15,15 +18,19 @@ class MessageController extends Controller
     {
         $this->service = $service;
     }
-    public function store(StoreMessageRequest $request){
-        $dto = new CreateMessageDTO(
-            content: $request->validated('content'),
-            showAt: Carbon::parse($request->validated('show_at'))
-        );
+    public function store(StoreMessageRequest $request): JsonResponse{
+        $dto = CreateMessageData::from($request->validated());
         $message = $this->service->create($dto);
-        return (new MessageResource($message))
+        return new MessageTokenResource($message)
             ->response()
             ->setStatusCode(201);
+    }
+    public function showByLink(string $token):MessageResource
+    {
+        $message = $this->service->showMessageByLink($token);
+        return new MessageResource($message);
+
+
     }
 
 

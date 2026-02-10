@@ -12,14 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
             $table->uuid('id')->primary();
             $table->string('token', 64)->unique();
             $table->text('content');
-            $table->timestampTz('show_at');
-            $table->timestampTz('expires_at');
-            $table->index('expires_at');
-            $table->timestamps();
+            $table->timestamp('show_at')->useCurrent()->nullable();            $table->timestamps();
         });
     }
 

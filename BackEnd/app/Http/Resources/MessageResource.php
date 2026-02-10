@@ -15,11 +15,9 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'token'      => $this->token,
-            'content'    => $this->content,
-            'show_at'    => $this->show_at?->toIso8601String(),
-            'expires_at' => $this->expires_at?->toIso8601String(),
-            'link'       => url("/m/{$this->token}"), // frontend can open /m/{token}
+            'content' => $this->content,
+            'status' => $this->status,
+            'show_at' => $this->showAt
         ];
     }
 
