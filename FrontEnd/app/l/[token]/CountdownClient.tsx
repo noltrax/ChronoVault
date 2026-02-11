@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Countdown from "@/components/Countdown3D/Countdown/Countdown";
-import DigitalBackground from "@/components/Digitalbg/Digitalbg";
+import DigitalBackground from "@/components/Digitalbg/DigitalBackground";
 import DraggableWrapper from "@/components/Countdown3D/DraggableWrapper/DraggableWrapper";
 import CubesScene from "@/components/CubesScene/CubesScene";
 
