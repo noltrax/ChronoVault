@@ -1,0 +1,39 @@
+.reveal-logo-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  width: 500px; /* final width of logo */
+  height: auto;
+  pointer-events: none; /* so it doesn't block cube interaction */
+  z-index: 0; /* behind the cube */
+}
+
+.reveal-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cube-intro-message {
+  animation: cube-ground-tilt-message 0.8s ease-in-out forwards;
+  transform-style: preserve-3d;
+}
+@keyframes cube-ground-tilt {
+  0% {
+    transform: rotateX(-15deg) rotateY(0deg) rotateZ(0deg);
+  }
+  /* 25% {
+    transform: rotateX(-15deg) rotate3d(0, 0, 1, 90deg);
+  }
+  50% {
+    transform: rotateX(-15deg) rotate3d(0, 0, 1, 180deg);
+  }
+  75% {
+    transform: rotateX(-15deg) rotate3d(0, 0, 1, 270deg);
+  } */
+  100% {
+    transform: rotateX(-15deg) rotate3d(0, 0, 1, 360deg);
+  }
+}
