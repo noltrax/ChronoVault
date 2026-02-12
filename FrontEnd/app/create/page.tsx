@@ -3,31 +3,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 export default function CreateMessagePage() {
   const [content, setMessage] = useState("");
-  const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pageLoading, setPageLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   const handleSubmit = async () => {
     setError(null);
 
-    // Frontend validation
-    if (!content.trim() || !date || !time) {
+    if (!content.trim() || !selectedDate) {
       setError("Message, date, and time are required.");
       return;
     }
 
-    const showAt = new Date(`${date}T${time}:00`);
+    const showAt = new Date();
     const now = new Date();
     if (showAt <= now) {
       setError("The time must be in the future.");
@@ -144,7 +143,7 @@ export default function CreateMessagePage() {
                 value={content}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write something for the future…"
-                className="min-h-[180px] max-h-[300]"
+                className="min-h-[180px] max-h-[300] bg-emerald-950"
                 style={{
                   backgroundColor: `${cardBg}/60`,
                   borderColor: border,
@@ -153,31 +152,12 @@ export default function CreateMessagePage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label style={{ color: textSecondary }}>Date</Label>
-                <Input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  style={{
-                    backgroundColor: `${cardBg}/60`,
-                    borderColor: border,
-                    color: textMain,
-                  }}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label style={{ color: textSecondary }}>Time</Label>
-                <Input
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  style={{
-                    backgroundColor: `${cardBg}/60`,
-                    borderColor: border,
-                    color: textMain,
-                  }}
+            <div className="flex  gap-4">
+              <div className="space-y-2 w-2xl">
+                <Label style={{ color: textSecondary }}>Date & Time</Label>
+                <DateTimePicker
+                  value={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
                 />
               </div>
             </div>
@@ -186,10 +166,9 @@ export default function CreateMessagePage() {
               onClick={handleSubmit}
               disabled={loading}
               style={{
-                backgroundColor: accent,
-                color: "black",
+                color: "white",
               }}
-              className="w-full font-semibold tracking-wide hover:bg-[buttonHover]"
+              className="w-full font-semibold tracking-wide hover:bg-emerald-800 bg-emerald-600 cursor-pointer"
             >
               {loading ? "Sealing vault…" : "Create Vault Link"}
             </Button>
