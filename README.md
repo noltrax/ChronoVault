@@ -167,12 +167,12 @@ docker compose up -d --build
 
 ### Create Message
 ```
-POST /api/messages
+POST /api/v1/messages
 ```
 
-### List Messages
+### 🔐 View Special Message by Token
 ```
-GET /api/messages
+GET /api/v1/messages/link/{token}
 ```
 
 Messages are revealed based on the `showAt` timestamp.
