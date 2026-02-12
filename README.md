@@ -252,5 +252,5 @@ yarn add countdown3d
 
 This project is licensed under the **MIT License**.
 
-© SMR.Mahinpour & ChronoVault Contributors
+© SMR.Mahinpour & zahrew ChronoVault Contributors
 
