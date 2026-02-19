@@ -2,35 +2,47 @@
 
 import React, { useEffect, useState } from "react";
 import Cube from "@/components/Countdown3D/Cube/Cube";
-import { motion } from "framer-motion";
+import { motion, scale } from "framer-motion";
 import "./CubeLoading.css";
 
 export default function CubeLoading({
   onIntroDone,
-  bgColor = "#065f46", // default to your revealed message background (bg-emerald-950)
+  onScaleDone,
+  bgColor = "#065f46",
 }: {
   onIntroDone?: () => void;
+  onScaleDone?: () => void;
   bgColor?: string;
 }) {
-  const [phase, setPhase] = useState<"intro" | "idle" | "scale">("intro");
+  const [phase, setPhase] = useState<"intro" | "idle" | "scale" | "done">(
+    "intro",
+  );
 
   useEffect(() => {
-    // 1️⃣ Intro phase
+    const timers: NodeJS.Timeout[] = [];
+
     const introTimer = setTimeout(() => {
       setPhase("idle");
+      onIntroDone?.();
 
-      // 2️⃣ Idle phase for 1s
       const idleTimer = setTimeout(() => {
-        // 3️⃣ Start scale phase
         setPhase("scale");
+
+        const scaleTimer = setTimeout(() => {
+          setPhase("done");
+          onScaleDone?.();
+        }, 1000);
+
+        timers.push(scaleTimer);
       }, 1000);
 
-      return () => clearTimeout(idleTimer);
+      timers.push(idleTimer);
     }, 2500);
 
-    return () => clearTimeout(introTimer);
-  }, []);
+    timers.push(introTimer);
 
+    return () => timers.forEach((t) => clearTimeout(t));
+  }, []);
   return (
     <div className="min-h-screen flex items-center justify-center relative">
       <div className="cube-wrapper">
@@ -38,17 +50,12 @@ export default function CubeLoading({
           className="cube-scale"
           animate={
             phase === "scale"
-              ? {
-                  scale: 1000, // scale up to fill the screen
-                  backgroundColor: bgColor,
-                  borderRadius: 0,
-                }
-              : { scale: 2 }
+              ? { scale: 1000, backgroundColor: bgColor, borderRadius: 0 }
+              : phase === "done"
+                ? { scale: 1000, backgroundColor: bgColor, borderRadius: 0 } // keep scale after done
+                : { scale: 2 } // intro/idle
           }
           transition={{ duration: 1, ease: "easeInOut" }}
-          onAnimationComplete={() => {
-            if (phase === "scale") onIntroDone?.();
-          }}
         >
           <div
             className={`cube-ground-rotator ${

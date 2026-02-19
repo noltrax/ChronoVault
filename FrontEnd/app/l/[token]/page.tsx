@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Countdown from "@/components/Countdown3D/Countdown/Countdown";
 import DigitalBackground from "@/components/Digitalbg/DigitalBackground";
 import CubeLoading from "@/components/Loading/CubeLoading";
-import CubeMessageReveal from "@/components/MessageReveal/MessageReveal";
+import MessageReveal from "@/components/MessageReveal/MessageReveal";
 import axios from "axios";
 import { useParams } from "next/navigation";
 
@@ -26,7 +26,6 @@ export default function VaultPage() {
 
   const [startSeconds, setStartSeconds] = useState<number | null>(null);
 
-  /* ---------------- Fetch message ---------------- */
   useEffect(() => {
     if (!token) return;
 
@@ -45,7 +44,7 @@ export default function VaultPage() {
         });
 
         if (data.status === "revealed") {
-          setStartSeconds(3); // post-reveal countdown
+          setStartSeconds(10);
         }
 
         if (data.status === "waiting" && data.show_at) {
@@ -64,9 +63,8 @@ export default function VaultPage() {
     };
 
     fetchMessage();
-  }, [token]);
+  }, [token, cubeDone]);
 
-  /* ---------------- Loading ---------------- */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-green-400">
@@ -75,7 +73,6 @@ export default function VaultPage() {
     );
   }
 
-  /* ---------------- Countdown Stage ---------------- */
   if (!countdownDone && startSeconds !== null) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center relative">
@@ -86,7 +83,6 @@ export default function VaultPage() {
           spacing={2}
           startAngle={-10}
           onComplete={() => {
-            // Explosion finished
             setCountdownDone(true);
           }}
         />
@@ -94,7 +90,6 @@ export default function VaultPage() {
     );
   }
 
-  /* ---------------- CubeLoading Stage ---------------- */
   if (countdownDone && !revealed) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -102,7 +97,9 @@ export default function VaultPage() {
         <CubeLoading
           bgColor="#065f46"
           onIntroDone={() => {
-            // Loading animation finished
+            setCubeDone(true);
+          }}
+          onScaleDone={() => {
             setRevealed(true);
           }}
         />
@@ -110,18 +107,16 @@ export default function VaultPage() {
     );
   }
 
-  /* ---------------- Revealed Message ---------------- */
   if (revealed || messageData?.status === "revealed") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#065f46] p-6 relative">
         {messageData?.content && (
-          <CubeMessageReveal message={messageData.content} />
+          <MessageReveal message={messageData.content} />
         )}
       </div>
     );
   }
 
-  /* ---------------- Expired ---------------- */
   if (messageData?.status === "expired") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-green-400">
@@ -130,7 +125,6 @@ export default function VaultPage() {
     );
   }
 
-  /* ---------------- Not Found ---------------- */
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-green-400">
       Message not found.

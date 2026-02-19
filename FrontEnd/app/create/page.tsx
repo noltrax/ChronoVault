@@ -26,9 +26,10 @@ export default function CreateMessagePage() {
       return;
     }
 
-    const showAt = new Date();
+    const showAt = selectedDate;
     const now = new Date();
-    if (showAt <= now) {
+    console.log(selectedDate > now);
+    if (now >= selectedDate) {
       setError("The time must be in the future.");
       return;
     }
